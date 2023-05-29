@@ -15,8 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 El funcionamiento del sensor MQ2 se basa principalmente en medir la variación en la conductividad de la alterada por la presencia de gases en el aire, estas variaciones producen señales eléctricas que se interpretan de diferentes maneras para llegar al valor de la concentración de gases en el ambiente. Para información más detallada consultar el [datasheet](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.pololu.com/file/0J309/MQ2.pdf).
 
-```{r, echo=FALSE, out.width="100%", fig.cap="MQ2"}
-knitr::include_graphics("C:\Users\Usuario\Documents\UNIVERSIDAD\8vo Semestre\Area electronica (electiva)\Datasets")
+```{r, echo=FALSE, fig.cap="Título de la imagen", out.width="30%"}
+knitr::include_graphics("C:/Users/Usuario/Documents/UNIVERSIDAD/8vo Semestre/Area electronica (electiva)/Datasets/mq2.jpg")
 ```
 
 Para la recolección de datos usando el sensor MQ2, se simuló el ambiente de una cueva volcánica, la cual constaba con irregularidades en el suelo como si fueran grietas, en estas también se agrego alcohol atomizado, se humedecieron partes del ambiente con gasolina y se agrego un poco de gas de un encendedor para simular los gases tóxicos que dichas cuevas pueden llegar a expulsar.
@@ -25,7 +25,9 @@ Para la recolección de datos usando el sensor MQ2, se simuló el ambiente de un
 
 El sensor DHT11 es un sensor capacitivo que mide la humedad y temperatura relativa del aire, incluye también un termistor interno el cual mide la temperatura del ambiente, y muestra los datos mediante una señal digital en el pin de datos, Para información más detallada revisar el [datasheet](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.mouser.com/datasheet/2/758/DHT11-Technical-Data-Sheet-Translated-Version-1143054.pdf).
 
-##imagen del sensor##![]()
+```{r, echo=FALSE, fig.cap="Título de la imagen", out.width="30%"}
+knitr::include_graphics("C:/Users/Usuario/Documents/UNIVERSIDAD/8vo Semestre/Area electronica (electiva)/Datasets/hdt11.jpg")
+```
 
 En cuanto a la recolección de datos, se tuvieron en cuenta dos de los ambientes simulados, la jungla y el desierto, ya que estos ambientes cambian abruptamente las magnitudes de temperatura y calor debido a la relación entre estas, ya que en el ambiente de jungla se buscaba encontrar una alta humedad y mantener una temperatura relativa estable para que le sensor midiera la relación normalizada en este ambiente, en el ambiente de desierto se busco lo contrario, y se evidencio en el dataset como al elevar la temperatura el factor de humedad disminuye considerable y constantemente.
 
@@ -33,11 +35,13 @@ En cuanto a la recolección de datos, se tuvieron en cuenta dos de los ambientes
 
 El funcionamiento básico del sensor Hc Sr04 (sensor de ultrasonido) es de la emisión y recepción de pulsos ultrasónicos por sus transductores y medir el tiempo que este tarda en llegar al receptor del sensor. Para información más detallada puede consultar el [datasheet](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://leantec.es/wp-content/uploads/2019/06/Leantec.ES-HC-SR04.pdf).
 
-##imagen del sensor##
+```{r, echo=FALSE, fig.cap="Título de la imagen", out.width="30%"}
+knitr::include_graphics("C:/Users/Usuario/Documents/UNIVERSIDAD/8vo Semestre/Area electronica (electiva)/Datasets/ultrasonido.jpg")
+```
 
 El sensor de ultrasonido resultó útil en los 3 ambientes, ya que cada uno de estos simulo una distancia de espacio diferente, en el caso de la cueva, al ser ambiente con menor espacio, comparando sus medidas con los demás ambientes son considerables, en el ambiente de jungla al tener diferentes obstáculos y al estar en diferentes alturas, se buscaba simular un espacio con árboles, hojas y/o arbustos, los cuales dificultaran la medición de un espacio exterior, y finalmente en el espacio de desierto se aplicó lo contrario a los dos anteriores escenarios, ya que als er un desierto el espacio de este es muy amplio y esto se refleja en las medidas del dataset.
 
-## Partición del DataSet
+## Modelos de Predicción
 
 Para realizar la partición del dataset, se realizan las líneas de código:
 
@@ -45,23 +49,30 @@ las cuales dan a entender que el dataset tomará una partición de 70 / 30, el c
 
 Para asignar las funciones de entrenamiento y pruebas con los datos se realizan las líneas de las funciones respectivas.
 
-```{r pressure, echo=FALSE}
-
+```{r, eval=FALSE, echo=TRUE}
+library(tidyverse)
+library(psych)
+library(caret)
+library(ggplot2)
+library(rpart)
+library(randomForest)
+library(class)
+library(gmodels)
+predictors <- colnames(DataSet)[-7]
 data.samples <- sample(1:nrow(DataSet),
                        nrow(DataSet) *0.7, replace = FALSE)
-training.data <- DataSet[data.samples, ]
-test.data <- DataSet[-data.samples, ]
+sample(DataSet)
+training.data <- DataSet[data.samples,c(predictors,"AMBIENTE") ]
+test.data <- DataSet[-data.samples,c(predictors,"AMBIENTE") ]
 ```
 
 De esta manera ya logramos que en `training.data` quede nuestro nuevo dataset de entrenamiento y en `test.data` nuestros datos de prueba.
-
-## Modelos de Predicción
 
 ### Modelo Lineal
 
 Para nuestro modelo de predicción lineal asignamos las variables y la variable de clase al tipo de modelo lineal que vamos a elaborar, en este caso asignamos nuestras variables de temperatura, humedad, distancia, concentración de gases, y la variable predecir será nuestra variables clase la cual será el ambiente en el que se debería encontrar la plataforma robótica, esto se realiza mediante el siguiente código:
 
-```{r pressure, echo=FALSE}
+```{r, eval=FALSE, echo=TRUE}
 #Modelo Lineal
 modelo_multilineal <- lm(DataSet1$AMBIENTE ~ DataSet1$TEMP + DataSet1$HUMEDAD + DataSet1$DIS_UP +
                            DataSet1$PPM, data = training.data)
@@ -69,7 +80,7 @@ modelo_multilineal <- lm(DataSet1$AMBIENTE ~ DataSet1$TEMP + DataSet1$HUMEDAD + 
 
 Al final de esto, se ve como esto se asigna a nuestro `training.data`. Una vez realizado el modelo lineal, se utiliza la función `summary(modelo_multilineal)` y depsues se puede realizar la prediccion del modelo en base al `test.data`.
 
-```{r pressure, echo=FALSE}
+```{r, eval=FALSE, echo=TRUE}
 summary(modelo_multilineal)
 prediccionlm <- predict(modelo_multilineal,test.data)
 prediccionlm
@@ -85,7 +96,7 @@ View(RMSEmodelo1)
 
 Para el modelo de Árbol de decisión se requiere la funcion randomForest, y como en el caso anterior, se asigna el `training.data` teniendo en cuenta que la variable clase es `AMBIENTE`
 
-```{r pressure, echo=FALSE}
+```{r, eval=FALSE, echo=TRUE}
 # Arbol de decision
 fit.rf <- randomForest(AMBIENTE ~ TEMP + HUMEDAD + DIS_UP +
                                         PPM, data = training.data)
@@ -93,7 +104,7 @@ fit.rf <- randomForest(AMBIENTE ~ TEMP + HUMEDAD + DIS_UP +
 
 Después se realiza la predicción de de `fit.rf` junto a nuestro `test.data`, y como salida tenemos un dataframe relacionando nuestra predicción y nuestros datos de prueba.
 
-```{r pressure, echo=FALSE}
+```{r, eval=FALSE, echo=TRUE}
 
 prediction.rf <- predict(fit.rf, test.data)
 output <- data.frame(test.data$Mileage, prediction.rf)
@@ -104,7 +115,7 @@ RMSE = sqrt(sum((output$test.data.Mileage - output$prediction.rf)^2)/
 
 Para finalizar, realizamos el modelo de predicción 2 llamado RMSEmodelo2
 
-```{r pressure, echo=FALSE}
+```{r, eval=FALSE, echo=TRUE}
 
 RMSE
 RMSEmodelo2 = data.frame(prediccion = prediction.rf
