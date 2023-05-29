@@ -2,6 +2,9 @@ library(tidyverse)
 library(psych)
 library(caret)
 library(ggplot2)
+library(rpart)
+library(randomForest)
+head(cu.summary)
 DataSet1 <- DATASETMa
 colnames(DataSet1)
 summary(DataSet1)
@@ -16,6 +19,7 @@ data.samples <- sample(1:nrow(DataSet1),
 training.data <- DataSet1[data.samples, ]
 test.data <- DataSet1[-data.samples, ]
 #Arbol de decision
+set.seed(456)
 fit.rf <- randomForest(DataSet1$AMBIENTE ~ DataSet1$TEMP + DataSet1$HUMEDAD + DataSet1$DIS_UP +
                           DataSet1$PPM, data = training.data)
 prediction.rf <- predict(fit.rf, test.data)
