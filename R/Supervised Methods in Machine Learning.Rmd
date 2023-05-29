@@ -74,27 +74,26 @@ Para nuestro modelo de predicción lineal asignamos las variables y la variable 
 
 ```{r, eval=FALSE, echo=TRUE}
 #Modelo Lineal
-modelo_multilineal <- lm(DataSet1$AMBIENTE ~ DataSet1$TEMP + DataSet1$HUMEDAD + DataSet1$DIS_UP +
-                           DataSet1$PPM, data = training.data)
+modelo_multilineal <- lm(DataSet$AMBIENTE ~ DataSet$TEMP + DataSet$HUMEDAD + DataSet$DIS_UP +
+                           DataSet$PPM, data = training.data)
 ```
 
-Al final de esto, se ve como esto se asigna a nuestro `training.data`. Una vez realizado el modelo lineal, se utiliza la función `summary(modelo_multilineal)` y depsues se puede realizar la prediccion del modelo en base al `test.data`.
+Al final de esto, se asigna a `training.data`. Una vez realizado el modelo lineal, se utiliza la función `summary()`para hacer un resumen de estadistica de `modelo_multilineal` y después se puede realizar la predicción de `test.data` y esta se guarda en `prediccionlm`, luego se crea un nuevo dataframe llamado `RMSEmodelo1`, con las columnas de `prediccion` que guarda las predicciones realizadas, `actual` que almacena los valores de `AMBIENTE` y RSE que significa el error estándar residual, este se calcula con la raíz cuadrada de la diferencia al cuadrado entre las predicciones y los valores reales. en este caso sería `sqrt((prediccionlm-DataSet1$AMBIENTE)^2)`.
 
 ```{r, eval=FALSE, echo=TRUE}
 summary(modelo_multilineal)
 prediccionlm <- predict(modelo_multilineal,test.data)
 prediccionlm
-RMSEmodelo1 = data.frame(prediccion = prediccionlm
-                         ,actual =DataSet1
-                         ,RSE = sqrt((prediccionlm-DataSet1$AMBIENTE)^2)
-
+RMS1 = data.frame(prediccion = prediccionlm
+                         ,actual =DataSet
+                         ,RSE = sqrt((prediccionlm-DataSet$AMBIENTE)^2)
 )
-View(RMSEmodelo1)
+View(RMS1)
 ```
 
 ### Árbol de decisión
 
-Para el modelo de Árbol de decisión se requiere la funcion randomForest, y como en el caso anterior, se asigna el `training.data` teniendo en cuenta que la variable clase es `AMBIENTE`
+Para el modelo de Árbol de decisión se requiere la funcion randomForest, y como en el caso anterior, se asigna el `training.data` teniendo en cuenta que la variable clase es `AMBIENTE`.
 
 ```{r, eval=FALSE, echo=TRUE}
 # Arbol de decision
@@ -102,7 +101,7 @@ fit.rf <- randomForest(AMBIENTE ~ TEMP + HUMEDAD + DIS_UP +
                                         PPM, data = training.data)
 ```
 
-Después se realiza la predicción de de `fit.rf` junto a nuestro `test.data`, y como salida tenemos un dataframe relacionando nuestra predicción y nuestros datos de prueba.
+Después, se realiza la predicción de de `fit.rf` junto a nuestro `test.data`, y como salida tenemos un dataframe relacionando nuestra predicción y nuestros datos de prueba.
 
 ```{r, eval=FALSE, echo=TRUE}
 
@@ -110,10 +109,9 @@ prediction.rf <- predict(fit.rf, test.data)
 output <- data.frame(test.data$Mileage, prediction.rf)
 RMSE = sqrt(sum((output$test.data.Mileage - output$prediction.rf)^2)/
                 nrow(output))
-
 ```
 
-Para finalizar, realizamos el modelo de predicción 2 llamado RMSEmodelo2
+Para finalizar, realizamos el modelo de predicción 2 llamado RMSEmodelo2.
 
 ```{r, eval=FALSE, echo=TRUE}
 
@@ -125,3 +123,20 @@ RMSEmodelo2 = data.frame(prediccion = prediction.rf
                )
 View(RMSEmodelo2)
 ```
+## Modelo GLM
+
+Al igual que en los modelos anteriores se asignan nuestras variables teniendo en cuenta que la variable a predecir es la variable clase AMBIENTE, se declara la función summary al Modelo2 y después de esto se realiza la predicción con los datos de prueba, para finalizar se agrega RMS2 que contiene tres columnas: "prediccion", que almacena las predicciones de "ahora", que contiene los valores de la variable "AMBIENTE" en `test.data`, y "RSE" que representa el error estándar residual calculado como la raíz cuadrada de la diferencia al cuadrado entre las predicciones y los valores.
+Finalmente tenemos el `View(RMS2)` para ver los resultados de la prediccion.
+
+```{r, eval=FALSE, echo=TRUE}
+Modelo2 <- glm(AMBIENTE ~ TEMP + HUMEDAD + DIS_UP +
+                 PPM, data = training.data)
+summary(Modelo2)
+modeloPredictivo2 <- predict(Modelo2,test.data)
+RMS2 = data.frame(prediccion = modeloPredictivo2
+                  ,ahora =test.data$AMBIENTE
+                  ,RSE = sqrt((modeloPredictivo2-test.data$AMBIENTE)^2)
+)
+View(RMS2)
+```
+

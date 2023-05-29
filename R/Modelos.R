@@ -4,7 +4,7 @@ library(caret)
 library(ggplot2)
 library(rpart)
 library(randomForest)
-library(calss)
+library(class)
 library(gmodels)
 DataSet <- DATASETMa
 colnames(DataSet)
@@ -57,15 +57,16 @@ RMS2 = data.frame(prediccion = modeloPredictivo2
                   ,RSE = sqrt((modeloPredictivo2-test.data$AMBIENTE)^2)
 )
 View(RMS2)
-##--------------------modelo KNN----------------------------------------------
+##-------------------- Modelo KNN ----------------------------------------------
 predictors <- c("TEMP","HUMEDAD","DIS_UP","PPM")
 
 training.data <-
-  DataSet[sample.index,c(predictors,"AMBIENTE"),drop=F]
+  DataSet[data.samples,c(predictors,"AMBIENTE"),drop=F]
 test.data <-
-  DataSet[-sample.index,c(predictors,"AMBIENTE"),drop=F]
+  DataSet[-data.samples,c(predictors,"AMBIENTE"),drop=F]
 
 prediction <- knn(train = training.data[predictors]
                   , test = test.data[predictors]
                   ,cl = training.data$AMBIENTE, k=k)
-CrossTable
+CrossTable(x = test.data$AMBIENTE, y = prediction
+           , prop.chisq = F)
