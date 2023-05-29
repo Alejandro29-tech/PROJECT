@@ -5,22 +5,22 @@ library(ggplot2)
 library(rpart)
 library(randomForest)
 DataSet1 <- DATASETMa
-colnames(DataSet1)
-summary(DataSet1)
+colnames(DataSet)
+summary(DataSet)
 pairs(
-  DataSet1[c("TEMP","HUMEDAD","DIS_UP","PPM")]
-  ,pch=21, bg=c("black","blue","red","yellow","orange","purple","white")[unclass(DataSet1$AMBIENTE)]
+  DataSet[c("TEMP","HUMEDAD","DIS_UP","PPM")]
+  ,pch=21, bg=c("black","blue","red","yellow","orange","purple","white")[unclass(DataSet$AMBIENTE)]
   ,main="Sensor1 = Negro- Sensor 2 = Azul- Sensor3 = rojo, Sensor 4 = naranja"
 )
 
 ##----------------------Arbol de decision-----------------
-predictors <- colnames(DataSet1)[-7]
-data.samples <- sample(1:nrow(DataSet1),
-                       nrow(DataSet1) *0.7, replace = FALSE)
-sample(DataSet1)
-training.data <- DataSet1[data.samples,c(predictors,"AMBIENTE") ]
-test.data <- DataSet1[-data.samples,c(predictors,"AMBIENTE") ]
-#Arbol de decision
+predictors <- colnames(DataSet)[-7]
+data.samples <- sample(1:nrow(DataSet),
+                       nrow(DataSet) *0.7, replace = FALSE)
+sample(DataSet)
+training.data <- DataSet[data.samples,c(predictors,"AMBIENTE") ]
+test.data <- DataSet[-data.samples,c(predictors,"AMBIENTE") ]
+
 fit.rf <- randomForest(AMBIENTE ~ PPM + TEMP + HUMEDAD + DIS_UP, data = training.data)
 
 
@@ -34,15 +34,15 @@ RMSEmodelo2 = data.frame(prediccion = prediction.rf
                          ,ahora = test.data$Mileage
                          ,RSE = sqrt((prediction.rf-test.data$mileage)^2)
                          )
-#Modelo Lineal------------------------------------------------------------
-modelo_multilineal <- lm(DataSet1$AMBIENTE ~ DataSet1$TEMP + DataSet1$HUMEDAD + DataSet1$DIS_UP +
-                           DataSet1$PPM, data = training.data)
+#--------------------------------- Modelo Lineal---------------------------
+modelo_multilineal <- lm(DataSet$AMBIENTE ~ DataSet$TEMP + DataSet$HUMEDAD + DataSet$DIS_UP +
+                           DataSet$PPM, data = training.data)
 summary(modelo_multilineal)
 prediccionlm <- predict(modelo_multilineal,test.data)
 prediccionlm
 RMS1 = data.frame(prediccion = prediccionlm
-                         ,actual =DataSet1
-                         ,RSE = sqrt((prediccionlm-DataSet1$AMBIENTE)^2)
+                         ,actual =DataSet
+                         ,RSE = sqrt((prediccionlm-DataSet$AMBIENTE)^2)
 )
 View(RMS1)
 ##------------------Modelo GLM ------------------------------------------------
@@ -55,3 +55,4 @@ RMS2 = data.frame(prediccion = modeloPredictivo2
                   ,RSE = sqrt((modeloPredictivo2-test.data$AMBIENTE)^2)
 )
 View(RMS2)
+##--------------------modelo KNN----------------------------------------------
