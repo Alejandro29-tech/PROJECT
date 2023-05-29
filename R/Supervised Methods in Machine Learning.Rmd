@@ -15,6 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 El funcionamiento del sensor MQ2 se basa principalmente en medir la variación en la conductividad de la alterada por la presencia de gases en el aire, estas variaciones producen señales eléctricas que se interpretan de diferentes maneras para llegar al valor de la concentración de gases en el ambiente. Para información más detallada consultar el [datasheet](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.pololu.com/file/0J309/MQ2.pdf).
 
+![]()
+
 Para la recolección de datos usando el sensor MQ2, se simuló el ambiente de una cueva volcánica, la cual constaba con irregularidades en el suelo como si fueran grietas, en estas también se agrego alcohol atomizado, se humedecieron partes del ambiente con gasolina y se agrego un poco de gas de un encendedor para simular los gases tóxicos que dichas cuevas pueden llegar a expulsar.
 
 ### DHT11:
