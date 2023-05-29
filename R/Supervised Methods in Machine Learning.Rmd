@@ -15,7 +15,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 El funcionamiento del sensor MQ2 se basa principalmente en medir la variación en la conductividad de la alterada por la presencia de gases en el aire, estas variaciones producen señales eléctricas que se interpretan de diferentes maneras para llegar al valor de la concentración de gases en el ambiente. Para información más detallada consultar el [datasheet](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.pololu.com/file/0J309/MQ2.pdf).
 
-![]()
+```{r, echo=FALSE, out.width="100%", fig.cap="MQ2"}
+knitr::include_graphics("C:\Users\Usuario\Documents\UNIVERSIDAD\8vo Semestre\Area electronica (electiva)\Datasets")
+```
 
 Para la recolección de datos usando el sensor MQ2, se simuló el ambiente de una cueva volcánica, la cual constaba con irregularidades en el suelo como si fueran grietas, en estas también se agrego alcohol atomizado, se humedecieron partes del ambiente con gasolina y se agrego un poco de gas de un encendedor para simular los gases tóxicos que dichas cuevas pueden llegar a expulsar.
 
@@ -39,18 +41,16 @@ El sensor de ultrasonido resultó útil en los 3 ambientes, ya que cada uno de e
 
 Para realizar la partición del dataset, se realizan las líneas de código:
 
-```{r pressure, echo=FALSE}
-data.samples <- sample(1:nrow(DataSet1),
-                       nrow(DataSet1) *0.7, replace = FALSE)
-```
-
 las cuales dan a entender que el dataset tomará una partición de 70 / 30, el cual el 70% será dedicado a la función de entrenar nuestro algoritmo para que sea capaz de realizar predicciones, y el 30% será para realizar las pruebas de estas mismas.
 
 Para asignar las funciones de entrenamiento y pruebas con los datos se realizan las líneas de las funciones respectivas.
 
 ```{r pressure, echo=FALSE}
-training.data <- DataSet1[data.samples, ]
-test.data <- DataSet1[-data.samples, ]
+
+data.samples <- sample(1:nrow(DataSet),
+                       nrow(DataSet) *0.7, replace = FALSE)
+training.data <- DataSet[data.samples, ]
+test.data <- DataSet[-data.samples, ]
 ```
 
 De esta manera ya logramos que en `training.data` quede nuestro nuevo dataset de entrenamiento y en `test.data` nuestros datos de prueba.

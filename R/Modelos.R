@@ -4,7 +4,9 @@ library(caret)
 library(ggplot2)
 library(rpart)
 library(randomForest)
-DataSet1 <- DATASETMa
+library(calss)
+library(gmodels)
+DataSet <- DATASETMa
 colnames(DataSet)
 summary(DataSet)
 pairs(
@@ -56,3 +58,14 @@ RMS2 = data.frame(prediccion = modeloPredictivo2
 )
 View(RMS2)
 ##--------------------modelo KNN----------------------------------------------
+predictors <- c("TEMP","HUMEDAD","DIS_UP","PPM")
+
+training.data <-
+  DataSet[sample.index,c(predictors,"AMBIENTE"),drop=F]
+test.data <-
+  DataSet[-sample.index,c(predictors,"AMBIENTE"),drop=F]
+
+prediction <- knn(train = training.data[predictors]
+                  , test = test.data[predictors]
+                  ,cl = training.data$AMBIENTE, k=k)
+CrossTable
