@@ -1,0 +1,48 @@
+---
+title: "UntitledAssignment 3, “Supervised learning final project”"
+author: "Alejandro Pachón, Santiago Meza, Alexander Morgan"
+date: "2023-05-29"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Sensores
+
+### MQ2:
+
+El funcionamiento del sensor MQ2 se basa principalmente en medir la variación en la conductividad de la alterada por la presencia de gases en el aire, estas variaciones producen señales eléctricas que se interpretan de diferentes maneras para llegar al valor de la concentración de gases en el ambiente. Para información más detallada puede consultar el datasheet.
+
+Para la recolección de datos usando el sensor MQ2, se simuló el ambiente de una cueva volcánica, la cual constaba con irregularidades en el suelo como si fueran grietas, en estas también se agrego alcohol atomizado, se humedecieron partes del ambiente con gasolina y se agrego un poco de gas de un encendedor para simular los gases tóxicos que dichas cuevas pueden llegar a expulsar.
+
+### DHT11:
+
+El sensor DHT11 es un sensor capacitivo que mide la humedad y temperatura relativa del aire, incluye también un termistor interno el cual mide la temperatura del ambiente, y muestra los datos mediante una señal digital en el pin de datos, Para información más detallada puede consultar el datasheet.
+
+##imagen del sensor##
+
+En cuanto a la recolección de datos, se tuvieron en cuenta dos de los ambientes simulados, la jungla y el desierto, ya que estos ambientes cambian abruptamente las magnitudes de temperatura y calor debido a la relación entre estas, ya que en el ambiente de jungla se buscaba encontrar una alta humedad y mantener una temperatura relativa estable para que le sensor midiera la relación normalizada en este ambiente, en el ambiente de desierto se busco lo contrario, y se evidencio en el dataset como al elevar la temperatura el factor de humedad disminuye considerable y constantemente.
+
+### Hc Sr04
+
+El funcionamiento básico del sensor Hc Sr04 (sensor de ultrasonido) es de la emisión y recepción de pulsos ultrasónicos por sus transductores y medir el tiempo que este tarda en llegar al receptor del sensor. Para información más detallada puede consultar el datasheet.
+
+##imagen del sensor##
+
+El sensor de ultrasonido resultó útil en los 3 ambientes, ya que cada uno de estos simulo una distancia de espacio diferente, en el caso de la cueva, al ser ambiente con menor espacio, comparando sus medidas con los demás ambientes son considerables, en el ambiente de jungla al tener diferentes obstáculos y al estar en diferentes alturas, se buscaba simular un espacio con árboles, hojas y/o arbustos, los cuales dificultaran la medición de un espacio exterior, y finalmente en el espacio de desierto se aplicó lo contrario a los dos anteriores escenarios, ya que als er un desierto el espacio de este es muy amplio y esto se refleja en las medidas del dataset.
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
